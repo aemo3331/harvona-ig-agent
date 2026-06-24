@@ -5,6 +5,7 @@ const client = new Anthropic();
 
 export interface ContentBrief {
   brand: string;
+  about: string;
   voice: string;
   guidelines: string;
   topic: string;
@@ -24,6 +25,7 @@ export interface GeneratedPost {
 export async function generatePost(brief: ContentBrief): Promise<GeneratedPost> {
   const system = [
     `You are the social media content lead for ${brief.brand}, an Instagram brand account.`,
+    `About the company: ${brief.about}`,
     `Brand voice: ${brief.voice}`,
     `Guidelines: ${brief.guidelines}`,
     `Image style: ${brief.imageStyle}`,

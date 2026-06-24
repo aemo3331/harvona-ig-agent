@@ -6,6 +6,7 @@ import { generateImage } from "./lib/image.js";
 interface Config {
   brand: string;
   handle: string;
+  about: string;
   voice: string;
   guidelines: string;
   topics: string[];
@@ -27,6 +28,7 @@ async function main() {
 
   const brief: ContentBrief = {
     brand: config.brand,
+    about: config.about,
     voice: config.voice,
     guidelines: config.guidelines,
     topic,
