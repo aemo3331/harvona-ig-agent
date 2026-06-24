@@ -1,0 +1,23 @@
+{
+  "name": "harvona-ig-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AI content agent for the @harvona_international_ai Instagram account: generates image + caption, queues for review via PR, publishes via the Instagram Graph API.",
+  "scripts": {
+    "gen": "tsx src/generate.ts",
+    "publish:posts": "tsx src/publish.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  }
+}

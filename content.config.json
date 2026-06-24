@@ -1,0 +1,14 @@
+{
+  "brand": "Harvona International",
+  "handle": "harvona_international_ai",
+  "voice": "Confident, forward-looking, and clear. Professional but human. Avoid hype words like 'revolutionary' or 'game-changing'. Write for an audience interested in AI and modern business.",
+  "guidelines": "Captions are 1-3 short paragraphs. Open with a hook, not a greeting. No emoji spam (2-3 max, optional). Never invent statistics, prices, dates, or product claims. Hashtags: 5-12, relevant, lowercase, no spaces. The image prompt should describe a clean, on-brand visual with no text/words rendered in the image.",
+  "topics": [
+    "How AI is reshaping the way modern businesses operate",
+    "Practical automation wins teams can adopt this quarter",
+    "Demystifying a common AI concept for non-technical leaders",
+    "Behind the idea: what Harvona International stands for",
+    "A forward look at where AI-driven products are heading"
+  ],
+  "imageStyle": "Modern, minimal, high-contrast brand visual. Soft gradients, clean geometry, professional. No text or logos rendered in the image."
+}

@@ -1,0 +1,5 @@
+# pnpm 10+ gates dependency build scripts. tsx's engine (esbuild) needs its
+# build step approved so its native binary is available.
+# (pnpm 9, used in CI, reads the "pnpm" field in package.json instead.)
+allowBuilds:
+  esbuild: true

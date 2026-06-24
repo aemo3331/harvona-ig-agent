@@ -1,0 +1,50 @@
+name: Publish approved posts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "queue/**"
+  workflow_dispatch:
+
+# Prevent overlapping publish runs from racing on the same queue items.
+concurrency:
+  group: publish-posts
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - run: pnpm install
+
+      - name: Publish queued posts
+        run: pnpm publish:posts
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Commit published moves
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "Mark posts as published [skip ci]"
+            git push
+          fi

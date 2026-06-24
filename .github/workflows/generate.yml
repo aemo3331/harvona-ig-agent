@@ -1,0 +1,51 @@
+name: Generate post (review queue)
+
+on:
+  schedule:
+    # Mon / Wed / Fri at 13:00 UTC. Adjust to your cadence.
+    - cron: "0 13 * * 1,3,5"
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: "Optional: override the topic for this run"
+        required: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - run: pnpm install
+
+      - name: Generate a draft post
+        run: pnpm gen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          TOPIC: ${{ github.event.inputs.topic }}
+
+      - name: Open a review PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: post/run-${{ github.run_id }}
+          title: "📸 Draft post for review"
+          commit-message: "Add generated draft post"
+          add-paths: queue/**
+          body: |
+            A new AI-generated post is ready for review.
+
+            - **Review** the image and caption in the *Files changed* tab (open the `PREVIEW.md`).
+            - **Merge** this PR to approve → it publishes to Instagram automatically.
+            - **Close** it to reject.
