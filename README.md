@@ -6,8 +6,8 @@ and — once you merge — publishes it to Instagram via the official Graph API.
 
 ```
  ┌─ GENERATE (scheduled) ─────────────────────────────┐
- │  Claude writes caption + hashtags + image prompt    │
- │  Image model renders the visual                     │
+ │  Gemini writes caption + hashtags + image prompt    │
+ │  Gemini renders the image (converted to JPEG)       │
  │  Commits to /queue and opens a Pull Request         │
  └─────────────────────────────────────────────────────┘
             │  you review the PR →  merge = approve,  close = reject
@@ -18,7 +18,7 @@ and — once you merge — publishes it to Instagram via the official Graph API.
  └─────────────────────────────────────────────────────┘
 ```
 
-- **Generation:** Claude (`claude-opus-4-8`) for copy + a pluggable image model (default OpenAI `gpt-image-1`).
+- **Generation:** Google Gemini for both copy (`gemini-2.5-flash`) and image (`gemini-2.5-flash-image`) — one API key. The image is converted to JPEG (Instagram requires it).
 - **Review queue:** native GitHub PRs — the image renders right in the diff.
 - **Publishing:** Instagram Graph API (the sanctioned, ToS-safe path — no browser automation).
 
@@ -63,15 +63,23 @@ git push -u origin main
 
 Repo → *Settings → Secrets and variables → Actions → New repository secret*:
 
-| Secret              | Used by      | What it is                                            |
-| ------------------- | ------------ | ----------------------------------------------------- |
-| `ANTHROPIC_API_KEY` | generate     | Claude API key (caption generation)                   |
-| `OPENAI_API_KEY`    | generate     | Image model key (default provider)                    |
-| `IG_USER_ID`        | publish      | Instagram Business account numeric id                 |
-| `IG_ACCESS_TOKEN`   | publish      | Long-lived Graph API token with the scopes above      |
+| Secret            | Used by   | What it is                                              |
+| ----------------- | --------- | ------------------------------------------------------- |
+| `GEMINI_API_KEY`  | generate  | Google AI Studio API key — captions **and** images      |
+| `IG_USER_ID`      | publish   | Instagram Business account numeric id                   |
+| `IG_ACCESS_TOKEN` | publish   | Long-lived Graph API token with the scopes above        |
 
-Also enable: *Settings → Actions → General → Workflow permissions* →
-**Read and write**, and **Allow GitHub Actions to create and approve pull requests**.
+Get `GEMINI_API_KEY` free at [aistudio.google.com](https://aistudio.google.com) (a personal Google account works;
+the consumer "Gemini Advanced / Google Pro" subscription is separate and does **not** include API access).
+
+Set secrets from the repo with the GitHub CLI (the value is entered at a hidden prompt, never on the command line):
+
+```powershell
+gh secret set GEMINI_API_KEY    # run inside the repo, or add -R <owner>/<repo>
+```
+
+Workflow permissions (write + PR creation) are already enabled on this repo. To re-check:
+*Settings → Actions → General → Workflow permissions* → **Read and write** + **Allow GitHub Actions to create and approve pull requests**.
 
 ---
 
@@ -87,9 +95,11 @@ Also enable: *Settings → Actions → General → Workflow permissions* →
 
 - **Voice, topics, image style:** edit `content.config.json`.
 - **Cadence:** edit the `cron` in `.github/workflows/generate.yml`.
-- **Image provider:** replace the body of `generateImage()` in `src/lib/image.ts` (keep the
-  `(prompt) => Promise<Buffer>` signature; return a **JPEG** — Instagram requires it for feed images).
-- **Model:** caption model is `claude-opus-4-8` in `src/lib/anthropic.ts`.
+- **Models:** caption model is `gemini-2.5-flash` (`src/lib/gemini.ts`); image model is `gemini-2.5-flash-image`
+  (`src/lib/image.ts`). Override either without code changes via the `GEMINI_TEXT_MODEL` / `GEMINI_IMAGE_MODEL` env vars.
+- **Image provider:** the default uses Gemini's native image model and converts the result to JPEG with `sharp`
+  (Instagram requires JPEG). To use Imagen instead (finer control, but needs a billing-enabled tier) or another
+  provider, swap the body of `generateImage()` in `src/lib/image.ts` — keep the `(prompt) => Promise<Buffer>` signature returning a JPEG.
 
 ## Local development
 
@@ -109,8 +119,8 @@ pnpm typecheck
 src/
   generate.ts        # orchestrates one draft → writes queue/<id>/
   publish.ts         # publishes approved queue items → published/<id>/
-  lib/anthropic.ts   # caption + hashtags + image prompt (Claude, structured output)
-  lib/image.ts       # image generation (pluggable; default OpenAI gpt-image-1)
+  lib/gemini.ts      # caption + hashtags + image prompt (Gemini, structured output)
+  lib/image.ts       # image generation (Gemini native image -> JPEG via sharp)
   lib/instagram.ts   # Graph API: create container → publish
 .github/workflows/
   generate.yml       # scheduled generation → opens PR

@@ -1,6 +1,6 @@
 import { mkdir, writeFile, readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { generatePost, type ContentBrief } from "./lib/anthropic.js";
+import { generatePost, type ContentBrief } from "./lib/gemini.js";
 import { generateImage } from "./lib/image.js";
 
 interface Config {

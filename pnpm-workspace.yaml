@@ -2,4 +2,6 @@
 # build step approved so its native binary is available.
 # (pnpm 9, used in CI, reads the "pnpm" field in package.json instead.)
 allowBuilds:
+  '@google/genai': true
   esbuild: true
+  protobufjs: true
