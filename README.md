@@ -6,8 +6,8 @@ and — once you merge — publishes it to Instagram via the official Graph API.
 
 ```
  ┌─ GENERATE (scheduled) ─────────────────────────────┐
- │  Gemini writes caption + hashtags + image prompt    │
- │  Gemini renders the image (converted to JPEG)       │
+ │  Gemini writes caption + hashtags + headline        │
+ │  A branded image card is rendered locally (sharp)   │
  │  Commits to /queue and opens a Pull Request         │
  └─────────────────────────────────────────────────────┘
             │  you review the PR →  merge = approve,  close = reject
@@ -18,7 +18,7 @@ and — once you merge — publishes it to Instagram via the official Graph API.
  └─────────────────────────────────────────────────────┘
 ```
 
-- **Generation:** Google Gemini for both copy (`gemini-2.5-flash`) and image (`gemini-2.5-flash-image`) — one API key. The image is converted to JPEG (Instagram requires it).
+- **Generation:** Google Gemini writes the copy (`gemini-2.5-flash`, free tier) + a short headline; the image is a **branded card rendered locally with `sharp`** (no image API — Gemini's image model needs a paid tier). Output is JPEG (Instagram requires it). Swap in real AI images later by editing `src/lib/image.ts`.
 - **Review queue:** native GitHub PRs — the image renders right in the diff.
 - **Publishing:** Instagram Graph API (the sanctioned, ToS-safe path — no browser automation).
 
@@ -95,11 +95,10 @@ Workflow permissions (write + PR creation) are already enabled on this repo. To 
 
 - **Voice, topics, image style:** edit `content.config.json`.
 - **Cadence:** edit the `cron` in `.github/workflows/generate.yml`.
-- **Models:** caption model is `gemini-2.5-flash` (`src/lib/gemini.ts`); image model is `gemini-2.5-flash-image`
-  (`src/lib/image.ts`). Override either without code changes via the `GEMINI_TEXT_MODEL` / `GEMINI_IMAGE_MODEL` env vars.
-- **Image provider:** the default uses Gemini's native image model and converts the result to JPEG with `sharp`
-  (Instagram requires JPEG). To use Imagen instead (finer control, but needs a billing-enabled tier) or another
-  provider, swap the body of `generateImage()` in `src/lib/image.ts` — keep the `(prompt) => Promise<Buffer>` signature returning a JPEG.
+- **Caption model:** `gemini-2.5-flash` in `src/lib/gemini.ts` (override with the `GEMINI_TEXT_MODEL` env var).
+- **Image card:** rendered locally in `src/lib/image.ts` (SVG → JPEG via `sharp`) — colors, layout, and fonts
+  are edited right in that file. To switch to **real AI images** later (e.g. Gemini's `gemini-2.5-flash-image`
+  / Imagen, which need a billing-enabled Google tier), replace the body of `generateImage()` — keep it returning a JPEG `Buffer`.
 
 ## Local development
 

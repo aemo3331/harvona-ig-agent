@@ -39,7 +39,11 @@ async function main() {
   const post = await generatePost(brief);
 
   console.log("Generating the image...");
-  const image = await generateImage(`${post.imagePrompt}\n\nStyle: ${config.imageStyle}`);
+  const image = await generateImage({
+    brand: config.brand,
+    headline: post.headline,
+    handle: config.handle,
+  });
 
   const id = stamp();
   const dir = join("queue", id);
@@ -54,7 +58,7 @@ async function main() {
         topic,
         caption: post.caption,
         hashtags: post.hashtags,
-        imagePrompt: post.imagePrompt,
+        headline: post.headline,
         createdAt: new Date().toISOString(),
       },
       null,
