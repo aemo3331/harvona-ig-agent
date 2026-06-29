@@ -14,7 +14,7 @@ jobs:
         run: |
           # Read-only GET — confirms the id + token are valid and which account they point to. Does NOT post.
           HOST="${IG_GRAPH_HOST:-graph.instagram.com}"
-          resp=$(curl -s "https://${HOST}/v21.0/${IG_USER_ID}?fields=id,username,name&access_token=${IG_ACCESS_TOKEN}")
+          resp=$(curl -s "https://${HOST}/v21.0/${IG_USER_ID}?fields=id,username&access_token=${IG_ACCESS_TOKEN}")
           echo "Graph API response: $resp"
           if echo "$resp" | grep -q '"username"'; then
             echo "OK — credentials resolve to an Instagram account."
