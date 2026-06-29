@@ -9,9 +9,9 @@
  * committed image via raw.githubusercontent.com — see buildRawImageUrl().
  */
 
-// Defaults to the "Instagram API with Instagram Login" host. Override via env if you
-// use the Facebook-Login path (IG_GRAPH_HOST=graph.facebook.com) or a different version.
-const GRAPH_HOST = process.env.IG_GRAPH_HOST || "graph.instagram.com";
+// Defaults to the "Instagram API with Facebook Login" host (token starts with EAA…).
+// Override via env (IG_GRAPH_HOST=graph.instagram.com) for the Instagram-Login path.
+const GRAPH_HOST = process.env.IG_GRAPH_HOST || "graph.facebook.com";
 const GRAPH_VERSION = process.env.IG_GRAPH_VERSION || "v21.0";
 const GRAPH = `https://${GRAPH_HOST}/${GRAPH_VERSION}`;
 
