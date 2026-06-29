@@ -1,0 +1,14 @@
+# Draft post — 2026-06-29-1822
+
+**Topic:** How founders on a tight budget can punch above their weight with AI-assisted marketing
+
+![image](./image.jpg)
+
+## Caption
+
+Is your marketing budget feeling a bit stretched? As a founder, you know every dollar counts, and hiring a full marketing team isn't always an option. But what if you could multiply your marketing efforts without multiplying your spend?That's where AI-powered tools come in. Imagine generating creative ad copy variations, brainstorming blog ideas, or even analyzing basic campaign performance faster than ever before. AI helps your lean team punch way above its weight, making modern marketing approachable and efficient.It's about working smarter, not just harder. By integrating AI into your existing workflow, you can automate repetitive tasks and free up valuable time for strategic thinking and connecting with your audience. 💪What's one marketing task you'd love AI to take off your plate? Let us know below!
+
+#aimarketing #smallbusinessgrowth #founderhustle #marketingstrategy #digitalmarketing #ai #businessowner #leanmarketing #marketingtips #startupmarketing #artificialintelligence #budgetmarketing
+
+---
+_Merge this PR to approve and publish. Close it to reject._
