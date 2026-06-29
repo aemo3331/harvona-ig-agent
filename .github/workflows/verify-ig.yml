@@ -1,0 +1,23 @@
+name: Verify IG credentials (read-only)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve the Instagram account from the stored secrets
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: |
+          # Read-only GET — confirms the id + token are valid and which account they point to. Does NOT post.
+          resp=$(curl -s "https://graph.facebook.com/v21.0/${IG_USER_ID}?fields=id,username,name,profile_picture_url&access_token=${IG_ACCESS_TOKEN}")
+          echo "Graph API response: $resp"
+          if echo "$resp" | grep -q '"username"'; then
+            echo "OK — credentials resolve to an Instagram account."
+          else
+            echo "FAILED — wrong IG_USER_ID or an invalid/expired token (see response above)."
+            exit 1
+          fi
