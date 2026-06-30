@@ -22,6 +22,8 @@ and — once you merge — publishes it to Instagram via the official Graph API.
 - **Review queue:** native GitHub PRs — the image renders right in the diff.
 - **Publishing:** Instagram Graph API (the sanctioned, ToS-safe path — no browser automation).
 
+> 📓 **Maintenance & enhancements** (refreshing the access token before it expires, and swapping the image step to OpenAI/ChatGPT or Canva) are documented in **[docs/PROJECT-NOTES.md](docs/PROJECT-NOTES.md)**.
+
 ---
 
 ## One-time setup
