@@ -43,6 +43,8 @@ async function main() {
     brand: config.brand,
     headline: post.headline,
     handle: config.handle,
+    prompt: post.imagePrompt,
+    imageStyle: config.imageStyle,
   });
 
   const id = stamp();
@@ -59,6 +61,7 @@ async function main() {
         caption: post.caption,
         hashtags: post.hashtags,
         headline: post.headline,
+        imagePrompt: post.imagePrompt,
         createdAt: new Date().toISOString(),
       },
       null,

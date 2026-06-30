@@ -20,8 +20,10 @@ export interface ContentBrief {
 export interface GeneratedPost {
   caption: string;
   hashtags: string[];
-  /** Short punchy line (3-7 words) rendered on the branded image card. */
+  /** Short punchy line (3-7 words) — used on the local branded-card fallback. */
   headline: string;
+  /** Prompt for the AI image generator (OpenAI). No text/words/logos in the image. */
+  imagePrompt: string;
 }
 
 /**
@@ -34,7 +36,8 @@ export async function generatePost(brief: ContentBrief): Promise<GeneratedPost> 
     `About the company: ${brief.about}`,
     `Brand voice: ${brief.voice}`,
     `Guidelines: ${brief.guidelines}`,
-    `Produce exactly one post. The "headline" is a short, punchy hook of 3-7 words for a graphic card — no hashtags, no emoji, Title Case.`,
+    `Image style: ${brief.imageStyle}`,
+    `Produce exactly one post. "headline" is a short, punchy hook of 3-7 words (no hashtags, no emoji, Title Case). "image_prompt" describes a single still image for an image generator that matches the image style and the post's topic — with NO text, words, letters, or logos rendered in the image.`,
   ].join("\n\n");
 
   const response = await getClient().models.generateContent({
@@ -49,9 +52,10 @@ export async function generatePost(brief: ContentBrief): Promise<GeneratedPost> 
           caption: { type: Type.STRING },
           hashtags: { type: Type.ARRAY, items: { type: Type.STRING } },
           headline: { type: Type.STRING },
+          image_prompt: { type: Type.STRING },
         },
-        required: ["caption", "hashtags", "headline"],
-        propertyOrdering: ["caption", "hashtags", "headline"],
+        required: ["caption", "hashtags", "headline", "image_prompt"],
+        propertyOrdering: ["caption", "hashtags", "headline", "image_prompt"],
       },
     },
   });
@@ -63,11 +67,13 @@ export async function generatePost(brief: ContentBrief): Promise<GeneratedPost> 
     caption: string;
     hashtags: string[];
     headline: string;
+    image_prompt: string;
   };
 
   return {
     caption: data.caption.trim(),
     hashtags: (data.hashtags ?? []).map((h) => h.replace(/^#/, "").trim()).filter(Boolean),
     headline: data.headline.trim(),
+    imagePrompt: data.image_prompt.trim(),
   };
 }

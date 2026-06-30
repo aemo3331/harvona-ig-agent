@@ -18,7 +18,7 @@ and — once you merge — publishes it to Instagram via the official Graph API.
  └─────────────────────────────────────────────────────┘
 ```
 
-- **Generation:** Google Gemini writes the copy (`gemini-2.5-flash`, free tier) + a short headline; the image is a **branded card rendered locally with `sharp`** (no image API — Gemini's image model needs a paid tier). Output is JPEG (Instagram requires it). Swap in real AI images later by editing `src/lib/image.ts`.
+- **Generation:** Gemini (`gemini-2.5-flash`, free tier) writes the caption + headline + an image prompt. **Images:** if `OPENAI_API_KEY` is set → real AI images via **OpenAI `gpt-image-1`**; otherwise → a free local **branded card** (`sharp`). Either way the output is JPEG (Instagram requires it), and OpenAI errors fall back to the card automatically.
 - **Review queue:** native GitHub PRs — the image renders right in the diff.
 - **Publishing:** Instagram Graph API (the sanctioned, ToS-safe path — no browser automation).
 

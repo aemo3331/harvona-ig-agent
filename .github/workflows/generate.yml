@@ -33,6 +33,9 @@ jobs:
         run: pnpm gen
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # Optional: set this secret to generate real AI images with OpenAI gpt-image-1.
+          # If unset, the agent renders the free local branded card instead.
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           TOPIC: ${{ github.event.inputs.topic }}
 
       - name: Open a review PR

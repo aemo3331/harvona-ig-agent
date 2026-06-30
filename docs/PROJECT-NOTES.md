@@ -83,7 +83,7 @@ If you keep a user token, repeat steps 1–2 above before `2026-08-29` to mint a
 
 ## 5. Enhancement — real AI images via OpenAI / ChatGPT
 
-The **only** code that changes is `generateImage()` in `src/lib/image.ts`. Publishing is unchanged — it just needs a JPEG `Buffer`. The image source is fully decoupled.
+> ✅ **IMPLEMENTED (2026-06-30).** `src/lib/image.ts` now calls OpenAI `gpt-image-1` when `OPENAI_API_KEY` is set, and falls back to the local branded card otherwise (or on any OpenAI error). `gemini.ts` emits an `image_prompt`, and `generate.yml` already passes `OPENAI_API_KEY`. **To turn it on, you only need to add the `OPENAI_API_KEY` secret** — no code changes. The steps below document how it works / how to re-create it.
 
 **Steps:**
 1. Get an `OPENAI_API_KEY` (platform.openai.com, **personal** account — accenture.com is blocked). `gpt-image-1` requires **organization verification** (Settings → Organization → verify). Add billing.
