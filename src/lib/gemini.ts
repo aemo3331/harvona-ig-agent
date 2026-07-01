@@ -37,7 +37,7 @@ export async function generatePost(brief: ContentBrief): Promise<GeneratedPost> 
     `Brand voice: ${brief.voice}`,
     `Guidelines: ${brief.guidelines}`,
     `Image style: ${brief.imageStyle}`,
-    `Produce exactly one post. "headline" is a short, punchy hook of 3-7 words (no hashtags, no emoji, Title Case). "image_prompt" describes a single still image for an image generator that matches the image style and the post's topic — with NO text, words, letters, or logos rendered in the image.`,
+    `Produce exactly one post. "headline" is a short, punchy hook of 3-7 words (no hashtags, no emoji, Title Case). "image_prompt" describes a single still image that MUST show real people interacting in a concrete digital-marketing scenario tied to the topic (e.g. a founder and a teammate reviewing marketing results on a laptop, planning content, or filming a post) — genuine human faces and collaboration, never abstract or faceless figures. Follow the image style. Render NO text, words, letters, numbers, or logos anywhere in the image.`,
   ].join("\n\n");
 
   const response = await getClient().models.generateContent({
